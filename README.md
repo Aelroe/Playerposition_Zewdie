@@ -1,121 +1,121 @@
-![](UTA-DataScience-Logo.png)
+# ![](UTA-DataScience-Logo.png)
 
-# Project Title
+# Player Position Classification
 
-* **One Sentence Summary** Ex: This repository holds an attempt to apply LSTMs to Stock Market using data from
-"Get Rich" Kaggle challenge (provide link). 
+This repository contains a supervised machine learning project focused on predicting a soccer player’s primary position (Defender, Midfielder, Forward, Goalkeeper) using skill-based features from a publicly available player dataset.
 
 ## Overview
 
-* This section could contain a short paragraph which include the following:
-  * **Definition of the tasks / challenge**  Ex: The task, as defined by the Kaggle challenge is to use a time series of 12 features, sampled daily for 1 month, to predict the next day's price of a stock.
-  * **Your approach** Ex: The approach in this repository formulates the problem as regression task, using deep recurrent neural networks as the model with the full time series of features as input. We compared the performance of 3 different network architectures.
-  * **Summary of the performance achieved** Ex: Our best model was able to predict the next day stock price within 23%, 90% of the time. At the time of writing, the best performance on Kaggle of this metric is 18%.
+The task is to build a classification model that accurately predicts a player's primary position using a variety of physical, skill-based, and mental attributes. The dataset was cleaned and transformed to prepare it for classification modeling. Two models were tested: Random Forest and Logistic Regression. Model evaluation was conducted using classification reports, confusion matrices, and validation/test accuracy. Both models achieved strong performance, with Random Forest slightly outperforming Logistic Regression in macro-average F1-score.
 
-## Summary of Workdone
-
-Include only the sections that are relevant an appropriate.
+## Summary of Work Done
 
 ### Data
 
-* Data:
-  * Type: For example
-    * Input: medical images (1000x1000 pixel jpegs), CSV file: image filename -> diagnosis
-    * Input: CSV file of features, output: signal/background flag in 1st column.
-  * Size: How much data?
-  * Instances (Train, Test, Validation Split): how many data points? Ex: 1000 patients for training, 200 for testing, none for validation
+* **Input**: CSV file containing player attributes (physical, mental, technical) and position labels.
+* **Output**: Position group label (Defender, Midfielder, Forward, Goalkeeper)
+* **Size**: Approximately 17,000 players
+* **Train/Test/Validation Split**: 70% training, 15% validation, 15% test (200 players used in each evaluation set)
 
 #### Preprocessing / Clean up
 
-* Describe any manipulations you performed to the data.
+* Removed irrelevant or redundant columns
+* Standardized numerical columns
+* Encoded categorical columns (e.g., preferred foot)
+* Combined original position labels into 4 broader groups for classification
 
-#### Data Visualization
+### Data Visualization
 
-Show a few visualization of the data and say a few words about what you see.
+* A bar chart displayed the distribution of player positions to reveal class imbalance.
+* Feature importance from the Random Forest model identified the top 10 predictive attributes.
+* A correlation heatmap of top features was generated to understand multicollinearity.
 
 ### Problem Formulation
 
-* Define:
-  * Input / Output
-  * Models
-    * Describe the different models you tried and why.
-  * Loss, Optimizer, other Hyperparameters.
+* **Input**: Processed player features (numeric and categorical)
+* **Output**: One of four class labels representing player position
+* **Models**: Random Forest Classifier and Logistic Regression
+* **Loss Function & Optimization**: Models trained using scikit-learn defaults; no deep learning used, so standard sklearn fit procedures applied.
 
 ### Training
 
-* Describe the training:
-  * How you trained: software and hardware.
-  * How did training take.
-  * Training curves (loss vs epoch for test/train).
-  * How did you decide to stop training.
-  * Any difficulties? How did you resolve them?
+* Conducted in Google Colab with scikit-learn, pandas, and seaborn libraries
+* Dataset scaled and split using stratified splitting to maintain class balance
+* Training was fast due to dataset size and model type
+* Hyperparameters kept simple and default for comparison
 
 ### Performance Comparison
 
-* Clearly define the key performance metric(s).
-* Show/compare results in one table.
-* Show one (or few) visualization(s) of results, for example ROC curves.
+| Model               | Validation Accuracy | Test Accuracy |
+| ------------------- | ------------------- | ------------- |
+| Random Forest       | 0.89                | 0.880         |
+| Logistic Regression | 0.88                | 0.875         |
+
+* Random Forest achieved a slightly higher macro F1-score and accuracy
+* Confusion matrices and classification heatmaps used for interpretability
+* Goalkeeper classification was perfect in both models; Forward class was the hardest to classify accurately
 
 ### Conclusions
 
-* State any conclusions you can infer from your work. Example: LSTM work better than GRU.
+* Random Forest classifier performed slightly better than Logistic Regression
+* Technical and defending attributes are most important in determining position
+* Class imbalance (fewer Goalkeepers) did not affect performance negatively due to stratified splits
 
 ### Future Work
 
-* What would be the next thing that you would try.
-* What are some other studies that can be done starting from here.
+* Explore other models like XGBoost or LightGBM for potential improvements
+* Implement hyperparameter tuning (e.g., GridSearchCV)
+* Evaluate performance with cross-validation
+* Use additional metadata such as club level or country if available
 
-## How to reproduce results
+## How to Reproduce Results
 
-* In this section, provide instructions at least one of the following:
-   * Reproduce your results fully, including training.
-   * Apply this package to other data. For example, how to use the model you trained.
-   * Use this package to perform their own study.
-* Also describe what resources to use for this package, if appropirate. For example, point them to Collab and TPUs.
+To replicate the analysis:
 
-### Overview of files in repository
+1. Clone the repository
+2. Open the `Zewdie_PlayerPosition.ipynb` notebook
+3. Run all cells in sequence
+4. Ensure required packages are installed in Colab or local environment:
 
-* Describe the directory structure, if any.
-* List all relavent files and describe their role in the package.
-* An example:
-  * utils.py: various functions that are used in cleaning and visualizing data.
-  * preprocess.ipynb: Takes input data in CSV and writes out data frame after cleanup.
-  * visualization.ipynb: Creates various visualizations of the data.
-  * models.py: Contains functions that build the various models.
-  * training-model-1.ipynb: Trains the first model and saves model during training.
-  * training-model-2.ipynb: Trains the second model and saves model during training.
-  * training-model-3.ipynb: Trains the third model and saves model during training.
-  * performance.ipynb: loads multiple trained models and compares results.
-  * inference.ipynb: loads a trained model and applies it to test data to create kaggle submission.
+   * `pandas`
+   * `scikit-learn`
+   * `matplotlib`
+   * `seaborn`
 
-* Note that all of these notebooks should contain enough text for someone to understand what is happening.
+## Overview of Files in Repository
 
-### Software Setup
-* List all of the required packages.
-* If not standard, provide or point to instruction for installing the packages.
-* Describe how to install your package.
+* `Zewdie_PlayerPosition.ipynb`: Full notebook with preprocessing, modeling, and evaluation steps
+* `fifa_cleaned_model_data.csv`: Final cleaned dataset used for modeling
+* `random_forest_fifa_model.pkl`: Saved Random Forest model
+* `README.md`: Project summary and documentation (this file)
 
-### Data
+## Software Setup
 
-* Point to where they can download the data.
-* Lead them through preprocessing steps, if necessary.
+* Standard Python 3.10+
+* Run using Google Colab or Jupyter Notebook
+* Key packages: `pandas`, `sklearn`, `matplotlib`, `seaborn`
 
-### Training
+## Data
 
-* Describe how to train the model
+* Dataset originally obtained from a publicly shared Kaggle FIFA dataset
+* Preprocessing steps outlined in notebook
 
-#### Performance Evaluation
+## Training
 
-* Describe how to run the performance evaluation.
+* Run notebook cells from top to bottom
+* Model training included both Logistic Regression and Random Forest
 
+### Performance Evaluation
+
+* Confusion matrices and classification reports were generated using scikit-learn
+* Heatmaps and charts used to interpret results
 
 ## Citations
 
-* Provide any references.
+* FIFA dataset: [Kaggle Dataset](https://www.kaggle.com/datasets)
+* scikit-learn documentation
+* matplotlib and seaborn for plotting
 
+---
 
-
-
-
-
-
+This README is structured for presentation and project reproducibility, based on class submission guidelines.
