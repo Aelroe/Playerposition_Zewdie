@@ -2,101 +2,125 @@
 
 # Player Position Classification
 
-This repository presents a machine learning solution for classifying soccer players into one of four primary position groups (Goalkeeper, Defender, Midfielder, Forward) based on their skill attributes.
+This repository presents a machine learning solution for classifying soccer players into one of four primary position groups (Goalkeeper, Defender, Midfielder, Forward) based on their in-game attributes.
 
 ## Overview
 
-The objective is to build a supervised classification model that predicts a player's position group based on numerical performance features. The dataset was cleaned and processed by handling missing values, encoding categorical variables, and standardizing numerical features. Feature importance was assessed, and two models were compared: Random Forest and Logistic Regression. Evaluation was performed using accuracy, confusion matrices, and classification reports. Random Forest achieved the highest overall accuracy.
+The objective is to build a supervised classification model that predicts a player's position group using numerical and categorical features representing technical, physical, and mental skills. The dataset was cleaned and processed by removing missing values, encoding categorical features, and standardizing numerical columns. Two classification models were implemented and evaluated — Random Forest and Logistic Regression. Model performance was assessed using accuracy, confusion matrices, and classification reports. Random Forest yielded the highest classification accuracy across all player roles.
 
-## Summary of Workdone
+## Summary of Work Done
 
 ### Data
 
-* **Type**: CSV file of player features; output is position group (Defender, Midfielder, Forward, Goalkeeper).
-* **Size**: \~18,000 players and 84 features.
-* **Split**: 60% Training, 20% Validation, 20% Testing (\~10,800 train / \~3,600 val / \~3,600 test)
+- **Type**: Tabular CSV dataset with player statistics.
+  - **Input**: 83 numerical and categorical features (e.g., short passing, standing tackle, vision, work rate, preferred foot).
+  - **Target**: One of four position groups — Goalkeeper, Defender, Midfielder, Forward.
+- **Size**: ~18,000 player entries.
+- **Split**:
+  - Training set: ~10,800 players (60%)
+  - Validation set: ~3,600 players (20%)
+  - Test set: ~3,600 players (20%)
 
-#### Preprocessing / Clean Up
+### Preprocessing / Clean-Up
 
-* Missing values were removed.
-* Unnecessary and redundant columns were dropped.
-* Categorical variables were encoded (e.g., preferred foot, work rate).
-* Numerical features were scaled for the Logistic Regression model.
+- Columns with high missing values (e.g., goalkeeper-specific stats for non-GKs) were dropped.
+- Categorical columns such as `preferred_foot` and `work_rate` were one-hot encoded.
+- Numerical features were scaled using `StandardScaler` for Logistic Regression.
+- Final dataset used 84 features with no missing values.
 
-#### Data Visualization
+### Data Visualization
 
-* Distribution of players by position group was plotted.
-* Top 10 important features identified by Random Forest were visualized.
-* A correlation heatmap showed redundancy among top features.
+**1. Distribution of Position Groups**
+
+![position_distribution](visuals/position_distribution.png)
+
+**2. Top 10 Most Important Features (Random Forest)**
+
+![top10_features](visuals/top10_features.png)
+
+**3. Feature Correlation Heatmap (Among Important Features)**
+
+![correlation_heatmap](visuals/correlation_heatmap.png)
 
 ### Problem Formulation
 
-* **Input**: Selected numerical features representing technical, physical, and mental skills.
-* **Output**: Predicted player position group.
-* **Models**:
-
-  * Random Forest (default scikit-learn hyperparameters)
-  * Logistic Regression (scaled inputs, `max_iter=1000`)
-* **Metrics**: Accuracy, precision, recall, f1-score, and confusion matrix.
+- **Input**: Player performance attributes (e.g., passing accuracy, agility, strength).
+- **Output**: Predicted player position group.
+- **Models**:
+  - **Random Forest Classifier** (default scikit-learn parameters)
+  - **Logistic Regression** (with scaled features, `max_iter=1000`)
+- **Evaluation Metrics**:
+  - Accuracy
+  - Precision, Recall, F1-score (per class)
+  - Confusion Matrix
 
 ### Training
 
-* **Software**: Python with pandas, scikit-learn, seaborn, matplotlib.
-* **Hardware**: Local development on Jupyter Notebook (MacBook).
-* **Training Duration**: Less than 2 minutes per model.
-* Models were evaluated using validation and test splits.
+- **Environment**:
+  - Python 3, Jupyter Notebook
+  - Libraries: `pandas`, `scikit-learn`, `matplotlib`, `seaborn`
+- **Hardware**: MacBook, local environment
+- **Training Duration**: Under 2 minutes per model
+
+- Models were trained using the training set, validated on the validation set, and evaluated on the test set to ensure generalizability.
 
 ### Performance Comparison
 
 | Model               | Validation Accuracy | Test Accuracy |
-| ------------------- | ------------------- | ------------- |
+|---------------------|---------------------|---------------|
 | Random Forest       | 0.89                | 0.88          |
 | Logistic Regression | 0.88                | 0.875         |
 
-* Classification reports and confusion matrices were used to assess per-class performance.
-* Random Forest achieved perfect classification for Goalkeepers and the highest f1-scores overall.
+**Confusion Matrix (Random Forest Test Set)**
+
+![confusion_rf](visuals/confusion_matrix_rf.png)
+
+**Classification Report (Random Forest)**
+
+- Goalkeepers: Perfect classification (Precision = 1.0)
+- Highest F1-scores overall compared to Logistic Regression
+- Midfielders had the most confusion, but overall still high metrics
 
 ### Conclusions
 
-Random Forest provided the best generalization and most consistent classification across all position groups. Logistic Regression performed similarly but slightly underperformed on the Forward class.
+Random Forest outperformed Logistic Regression slightly, particularly in classifying Goalkeepers and Forwards. The model generalizes well to unseen data and is robust with minimal tuning. Logistic Regression performed reasonably well, especially for defenders and midfielders.
 
 ### Future Work
 
-* Try XGBoost or LightGBM for improved gradient boosting performance.
-* Perform more detailed hyperparameter tuning.
-* Incorporate additional contextual features such as age, height, or club ranking.
+- Test with advanced models like **XGBoost** or **LightGBM** to improve accuracy further.
+- Tune hyperparameters (e.g., `max_depth`, `n_estimators`) to optimize Random Forest performance.
+- Explore player-specific or contextual features such as club level, nationality, or transfer value.
+- Consider multi-label approaches for players with dual roles (e.g., Midfielder/Defender).
+
+---
 
 ## How to Reproduce Results
 
-### Environment Setup
-
-Install the required packages:
-
-```bash
-pip install pandas scikit-learn matplotlib seaborn
-```
-
 ### Data
 
-The dataset is derived from EA FC / FIFA 23 public datasets. After cleaning, the final file used was `fifa_cleaned_model_data.csv`.
+The cleaned dataset is embedded within the notebook. It is a subset and processed version of the original public FIFA/EA FC dataset.
 
-### Training
+### Training and Evaluation
 
-Run the notebook `Zewdie_PlayerPosition.ipynb` to reproduce the entire preprocessing, modeling, and evaluation pipeline.
+Run `Zewdie_PlayerPosition.ipynb` to reproduce the full pipeline including:
 
-### Evaluation
+- Data Cleaning and Encoding
+- Exploratory Visualizations
+- Model Training (Random Forest, Logistic Regression)
+- Evaluation using confusion matrices and classification reports
 
-Evaluation results including confusion matrices, classification reports, and heatmaps are visualized and interpreted within the notebook.
+---
 
 ## Overview of Files in Repository
 
-* `Zewdie_PlayerPosition.ipynb`: Main notebook with end-to-end modeling and analysis.
-* `fifa_cleaned_model_data.csv`: Cleaned and processed dataset used for modeling.
-* `random_forest_fifa_model.pkl`: Trained Random Forest model saved for reuse.
-* `README.md`: Project overview and instructions (this file).
+- `Zewdie_PlayerPosition.ipynb`: Complete project notebook with all steps and outputs.
+- `README.md`: Project overview and instructions (this file).
+- `visuals/`: Folder containing visualization PNGs included above.
+
+---
 
 ## Citations
 
-* EA Sports FIFA / Kaggle datasets.
-* scikit-learn documentation.
-* UTA Data Science course materials.
+- EA Sports / FIFA Dataset via Kaggle  
+- scikit-learn Documentation  
+- UTA Data Science Course Materials
