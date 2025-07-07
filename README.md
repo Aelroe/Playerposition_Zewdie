@@ -30,28 +30,25 @@ The objective is to build a supervised classification model that predicts a play
 
 ### Data Visualization
 
-**1. Distribution of Position Groups**
+**1. Distribution of Position Groups**  
+![position_distribution](position_distribution.png)
 
-![position_distribution](visuals/position_distribution.png)
+**2. Top 10 Most Important Features (Random Forest)**  
+![top10_features](top10_features.png)
 
-**2. Top 10 Most Important Features (Random Forest)**
-
-![top10_features](visuals/top10_features.png)
-
-**3. Feature Correlation Heatmap (Among Important Features)**
-
-![correlation_heatmap](visuals/correlation_heatmap.png)
+**3. Feature Correlation Heatmap (Top Features)**  
+![correlation_heatmap](correlation_heatmap.png)
 
 ### Problem Formulation
 
 - **Input**: Player performance attributes (e.g., passing accuracy, agility, strength).
 - **Output**: Predicted player position group.
 - **Models**:
-  - **Random Forest Classifier** (default scikit-learn parameters)
-  - **Logistic Regression** (with scaled features, `max_iter=1000`)
+  - Random Forest Classifier (default scikit-learn parameters)
+  - Logistic Regression (with scaled features, `max_iter=1000`)
 - **Evaluation Metrics**:
   - Accuracy
-  - Precision, Recall, F1-score (per class)
+  - Precision, Recall, F1-score
   - Confusion Matrix
 
 ### Training
@@ -62,7 +59,7 @@ The objective is to build a supervised classification model that predicts a play
 - **Hardware**: MacBook, local environment
 - **Training Duration**: Under 2 minutes per model
 
-- Models were trained using the training set, validated on the validation set, and evaluated on the test set to ensure generalizability.
+Models were trained using the training set, validated on the validation set, and evaluated on the test set to ensure generalizability.
 
 ### Performance Comparison
 
@@ -71,26 +68,20 @@ The objective is to build a supervised classification model that predicts a play
 | Random Forest       | 0.89                | 0.88          |
 | Logistic Regression | 0.88                | 0.875         |
 
-**Confusion Matrix (Random Forest Test Set)**
+**Confusion Matrix — Random Forest (Test Set)**  
+![confusion_rf](confusion_rf.png)
 
-![confusion_rf](visuals/confusion_matrix_rf.png)
-
-**Classification Report (Random Forest)**
-
-- Goalkeepers: Perfect classification (Precision = 1.0)
-- Highest F1-scores overall compared to Logistic Regression
-- Midfielders had the most confusion, but overall still high metrics
 
 ### Conclusions
 
-Random Forest outperformed Logistic Regression slightly, particularly in classifying Goalkeepers and Forwards. The model generalizes well to unseen data and is robust with minimal tuning. Logistic Regression performed reasonably well, especially for defenders and midfielders.
+Random Forest outperformed Logistic Regression slightly, particularly in classifying Goalkeepers and Forwards. The model generalized well to unseen data and maintained strong class-wise F1 scores. Logistic Regression performed well for Defenders and Midfielders but showed confusion in other roles.
 
 ### Future Work
 
-- Test with advanced models like **XGBoost** or **LightGBM** to improve accuracy further.
-- Tune hyperparameters (e.g., `max_depth`, `n_estimators`) to optimize Random Forest performance.
-- Explore player-specific or contextual features such as club level, nationality, or transfer value.
-- Consider multi-label approaches for players with dual roles (e.g., Midfielder/Defender).
+- Test advanced models like XGBoost or LightGBM for further performance gains.
+- Tune hyperparameters such as `max_depth`, `n_estimators` for Random Forest.
+- Incorporate contextual features (e.g., club position, league tier, nationality).
+- Explore multilabel or probabilistic classification for hybrid role players.
 
 ---
 
@@ -98,24 +89,27 @@ Random Forest outperformed Logistic Regression slightly, particularly in classif
 
 ### Data
 
-The cleaned dataset is embedded within the notebook. It is a subset and processed version of the original public FIFA/EA FC dataset.
+The cleaned dataset is embedded within the notebook. It is a processed subset of the publicly available EA FC/FIFA player dataset.
 
 ### Training and Evaluation
 
-Run `Zewdie_PlayerPosition.ipynb` to reproduce the full pipeline including:
+Run the `Zewdie_PlayerPosition.ipynb` notebook to reproduce the full pipeline, including:
 
 - Data Cleaning and Encoding
 - Exploratory Visualizations
 - Model Training (Random Forest, Logistic Regression)
-- Evaluation using confusion matrices and classification reports
+- Evaluation with confusion matrices and classification reports
 
 ---
 
-## Overview of Files in Repository
+## Repository Contents
 
-- `Zewdie_PlayerPosition.ipynb`: Complete project notebook with all steps and outputs.
-- `README.md`: Project overview and instructions (this file).
-- `visuals/`: Folder containing visualization PNGs included above.
+- `Zewdie_PlayerPosition.ipynb`: Complete project notebook.
+- `README.md`: This file.
+- `confusion_rf.png`: Random Forest confusion matrix.
+- `correlation_heatmap.png`: Feature correlation heatmap.
+- `top10_features.png`: Top features by importance.
+- `position_distribution.png`: Target class distribution.
 
 ---
 
@@ -123,4 +117,4 @@ Run `Zewdie_PlayerPosition.ipynb` to reproduce the full pipeline including:
 
 - EA Sports / FIFA Dataset via Kaggle  
 - scikit-learn Documentation  
-- UTA Data Science Course Materials
+- University of Texas at Arlington — Data Science Course Materials
