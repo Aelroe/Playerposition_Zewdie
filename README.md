@@ -1,121 +1,144 @@
 ![](UTA-DataScience-Logo.png)
 
-# Project Title
+# American Sign Language (ASL) Vision Project
 
-* **One Sentence Summary** Ex: This repository holds an attempt to apply LSTMs to Stock Market using data from
-"Get Rich" Kaggle challenge (provide link). 
+**One Sentence Summary**: This repository explores the classification of ASL signs using a baseline CNN and various transfer learning models on an image dataset.
 
 ## Overview
 
-* This section could contain a short paragraph which include the following:
-  * **Definition of the tasks / challenge**  Ex: The task, as defined by the Kaggle challenge is to use a time series of 12 features, sampled daily for 1 month, to predict the next day's price of a stock.
-  * **Your approach** Ex: The approach in this repository formulates the problem as regression task, using deep recurrent neural networks as the model with the full time series of features as input. We compared the performance of 3 different network architectures.
-  * **Summary of the performance achieved** Ex: Our best model was able to predict the next day stock price within 23%, 90% of the time. At the time of writing, the best performance on Kaggle of this metric is 18%.
+The goal of this project is to classify American Sign Language (ASL) images into one of two classes. We approached this problem as a binary classification task using convolutional neural networks (CNNs), including transfer learning from MobileNetV2 and EfficientNetB0. Our best-performing model, EfficientNetB0, achieved high accuracy while generalizing well across validation and test datasets.
 
 ## Summary of Workdone
 
-Include only the sections that are relevant an appropriate.
-
 ### Data
 
-* Data:
-  * Type: For example
-    * Input: medical images (1000x1000 pixel jpegs), CSV file: image filename -> diagnosis
-    * Input: CSV file of features, output: signal/background flag in 1st column.
-  * Size: How much data?
-  * Instances (Train, Test, Validation Split): how many data points? Ex: 1000 patients for training, 200 for testing, none for validation
+* **Input**: RGB images (200x200 pixels) labeled with ASL signs A and B.
+* **Size**: Approximately 7,000+ images.
+* **Split**:
+  * Training: 5,121 images
+  * Validation: 1,463 images
+  * Testing: 732 images
 
 #### Preprocessing / Clean up
 
-* Describe any manipulations you performed to the data.
+* Resized images to 200x200 pixels.
+* Applied normalization to scale pixel values.
+* One-hot encoded labels for binary classification.
+* Created data generators to augment training data (flipping, rotation, zooming, etc.).
 
 #### Data Visualization
 
-Show a few visualization of the data and say a few words about what you see.
+Below is a sample of the original dataset before preprocessing.
+
+![Sample Images](Image_1.png)
+
+We visualized accuracy and loss curves to evaluate model performance across training epochs.
 
 ### Problem Formulation
 
-* Define:
-  * Input / Output
-  * Models
-    * Describe the different models you tried and why.
-  * Loss, Optimizer, other Hyperparameters.
+* **Input**: 200x200x3 image tensor.
+* **Output**: Binary label (one-hot encoded).
+* **Models**:
+  * Baseline CNN (custom architecture)
+  * CNN with Image Augmentation
+  * MobileNetV2
+  * EfficientNetB0
+* **Loss Function**: Binary Crossentropy
+* **Optimizer**: Adam
+* **Batch Size**: 32
+* **Epochs**: 20
 
 ### Training
 
-* Describe the training:
-  * How you trained: software and hardware.
-  * How did training take.
-  * Training curves (loss vs epoch for test/train).
-  * How did you decide to stop training.
-  * Any difficulties? How did you resolve them?
+* **Environment**: Google Colab, GPU-enabled runtime.
+* **Time**: Each model took ~3–7 minutes to train.
+* **Early Stopping**: Used to prevent overfitting.
+* **Difficulties**: Balancing accuracy and overfitting on baseline models; resolved via data augmentation and transfer learning.
+
+**Training Curves:**
+
+- Baseline CNN Validation Accuracy  
+  ![CNN Accuracy](cnn_accuracy.png)
+
+- Baseline CNN Validation Loss  
+  ![CNN Loss](cnn_loss.png)
+
+- Accuracy Comparison (All Models)  
+  ![All Accuracy](model_accuracy.png)
+
+- Loss Comparison (All Models)  
+  ![All Loss](model_loss.png)
 
 ### Performance Comparison
 
-* Clearly define the key performance metric(s).
-* Show/compare results in one table.
-* Show one (or few) visualization(s) of results, for example ROC curves.
+* **Metrics**: Validation Accuracy, ROC AUC
+* **Results**:
+
+| Model          | Accuracy | ROC AUC |
+|----------------|----------|---------|
+| Baseline CNN   | ~88%     | 0.95    |
+| Augmented CNN  | ~91%     | 0.97    |
+| MobileNetV2    | ~94%     | 0.98    |
+| EfficientNetB0 | ~96%     | 0.99    |
+
+**ROC Curve – All Models**
+
+![ROC Curve](roc_all_models.png)
 
 ### Conclusions
 
-* State any conclusions you can infer from your work. Example: LSTM work better than GRU.
+* EfficientNetB0 achieved the best performance and generalization.
+* Transfer learning significantly improved results compared to baseline CNNs.
 
 ### Future Work
 
-* What would be the next thing that you would try.
-* What are some other studies that can be done starting from here.
+* Expand to full ASL alphabet (A–Z) or real-time gesture recognition.
+* Explore ensemble learning for multi-model consensus.
+* Deploy as a web app or mobile tool.
 
-## How to reproduce results
+## How to Reproduce Results
 
-* In this section, provide instructions at least one of the following:
-   * Reproduce your results fully, including training.
-   * Apply this package to other data. For example, how to use the model you trained.
-   * Use this package to perform their own study.
-* Also describe what resources to use for this package, if appropirate. For example, point them to Collab and TPUs.
+* Open `VisionProject_Zewdie.ipynb` in Google Colab.
+* Run all cells sequentially, ensuring GPU is enabled.
+* Download the ASL dataset and follow preprocessing as defined in the notebook.
 
-### Overview of files in repository
+## Overview of files in repository
 
-* Describe the directory structure, if any.
-* List all relavent files and describe their role in the package.
-* An example:
-  * utils.py: various functions that are used in cleaning and visualizing data.
-  * preprocess.ipynb: Takes input data in CSV and writes out data frame after cleanup.
-  * visualization.ipynb: Creates various visualizations of the data.
-  * models.py: Contains functions that build the various models.
-  * training-model-1.ipynb: Trains the first model and saves model during training.
-  * training-model-2.ipynb: Trains the second model and saves model during training.
-  * training-model-3.ipynb: Trains the third model and saves model during training.
-  * performance.ipynb: loads multiple trained models and compares results.
-  * inference.ipynb: loads a trained model and applies it to test data to create kaggle submission.
+* `VisionProject_Zewdie.ipynb`: Full notebook with training, evaluation, and visualizations.
+* `cnn_accuracy.png`: Accuracy curve for baseline CNN.
+* `cnn_loss.png`: Loss curve for baseline CNN.
+* `model_accuracy.png`: Validation accuracy comparison across all models.
+* `model_loss.png`: Validation loss comparison across all models.
+* `roc_all_models.png`: ROC curve for all trained models.
+* `Image_1.png`: Sample of preprocessed images.
+* `UTA-DataScience-Logo.png`: University logo.
 
-* Note that all of these notebooks should contain enough text for someone to understand what is happening.
+## Software Setup
 
-### Software Setup
-* List all of the required packages.
-* If not standard, provide or point to instruction for installing the packages.
-* Describe how to install your package.
+* Python 3.10+
+* TensorFlow 2.13+
+* scikit-learn
+* NumPy, pandas, matplotlib
+* Google Colab or any GPU-enabled environment
 
-### Data
+## Data
 
-* Point to where they can download the data.
-* Lead them through preprocessing steps, if necessary.
+* Dataset: [ASL Alphabet Dataset](https://www.kaggle.com/datasets/grassknoted/asl-alphabet)
+* Download and extract under your working directory.
+* Dataset is pre-separated by folder/class name.
 
-### Training
+## Training
 
-* Describe how to train the model
+* Run each model block (baseline, augmented, transfer models) in the notebook.
+* Visualizations are auto-generated and saved using `plt.savefig()`.
 
-#### Performance Evaluation
+### Performance Evaluation
 
-* Describe how to run the performance evaluation.
-
+* Run the final ROC plotting cell.
+* Compare model metrics printed in the summary table.
 
 ## Citations
 
-* Provide any references.
-
-
-
-
-
-
-
+* ASL Dataset by grassknoted on Kaggle: https://www.kaggle.com/datasets/grassknoted/asl-alphabet
+* TensorFlow documentation
+* Keras tutorials on Transfer Learning
